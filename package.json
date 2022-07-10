@@ -1,0 +1,22 @@
+{
+  "name": "devnews",
+  "version": "1.0.0",
+  "description": "y",
+  "main": "index.js",
+  "repository": "y",
+  "author": "amrohan",
+  "license": "y",
+  "private": true,
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.0.0",
+    "html-metadata-parser": "^2.0.4",
+    "rss-parser": "^3.12.0"
+  },
+  "devDependencies": {
+    "prisma": "^4.0.0"
+  }
+}
