@@ -56,6 +56,7 @@ async function getNewFeedItems() {
     "https://www.wired.com/feed",
     "https://hackernoon.com/feed",
     "https://css-tricks.com/feed/",
+    "https://www.producthunt.com/feed?category=undefined",
   ];
 
   for (let i = 0; i < feeds.length; i++) {
@@ -101,35 +102,70 @@ async function syncFeed() {
   });
   return feedUrls;
 }
+
 async function feedFetching() {
-  await prisma.$connect();
+  let metaArr = [];
   const feedUrls = await syncFeed();
-  try {
-    const metaData = feedUrls?.map(async (feed) => {
-      const data = await getData(feed.url);
-      dataObj = {
-        title: data.og.title || data.meta.title,
-        url: data.og.url || data.meta.url,
-        image: data.og.image || data.meta.image,
-        description: data.og.description || data.meta.description,
-        pubDate: feed.pubDate,
-        author: feed.author,
-      };
-      console.log(dataObj);
-      await prisma.articles.create({
-        data: {
-          title: dataObj.title,
-          url: dataObj.url,
-          image: dataObj.image,
-          description: dataObj.description,
-          pubDate: feed.pubDate,
-          author: feed.author,
-        },
-      });
+
+  for (let i = 0; i < feedUrls.length; i++) {
+    const feedUrl = feedUrls[i];
+    const data = await getData(feedUrl.url);
+    // console.log(feedItems)
+    let metaObj = {
+      title: data.og.title || data.meta.title,
+      url: data.og.url || data.meta.url,
+      image: data.og.image || data.meta.image,
+      description: data.og.description || data.meta.description,
+      pubDate: feedUrl.pubDate,
+      author: feedUrl.author,
+    };
+    metaArr = [...metaArr, metaObj];
+  }
+  // console.log(metaArr);
+  return metaArr;
+}
+
+async function syncToDb() {
+  await prisma.$connect();
+  const res = await feedFetching();
+  const mongoUrls = await prisma.articles
+    .findMany
+    // only fetch url of from the database
+    // {
+    //   select: {
+    //     url: true,
+    //   },
+    // }
+    ();
+  // console.log(mongoUrls);
+
+  // comapring urls from res.urls and mongoUrls
+  const urlsToBeAdded = res.filter((item) => {
+    return !mongoUrls.find((mongoItem) => {
+      return mongoItem.url === item.url;
     });
-  } catch (err) {
-    console.log(err);
+  });
+  console.log(urlsToBeAdded);
+  // adding data to database
+  for (let i = 0; i < urlsToBeAdded.length; i++) {
+    const url = urlsToBeAdded[i];
+    await prisma.articles.create({
+      data: {
+        title: url.title,
+        url: url.url,
+        image: url.image,
+        description: url.description,
+        pubDate: url.pubDate,
+        author: url.author,
+      },
+    });
   }
 }
 
-feedFetching();
+// delete all data from database
+// async function del() {
+//   const del = await prisma.articles.deleteMany({});
+// }
+// del();
+
+syncToDb();
