@@ -8,8 +8,9 @@ datasource db {
 }
 
 model articles {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
   author      String
+  createdAt   DateTime? @default(now())
   description String
   image       String
   pubDate     String
