@@ -141,7 +141,9 @@ async function syncToDb() {
       data: {
         title: url.title,
         url: url.url,
-        image: url.image,
+        image:
+          url.image ||
+          "https://res.cloudinary.com/amrohan/image/upload/v1658154724/Images/jhlb4lmgalptjtk2hknv.jpg",
         description: url.description || "",
         pubDate: url.pubDate,
         author: url.author,
