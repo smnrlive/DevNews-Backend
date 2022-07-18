@@ -48,15 +48,27 @@ async function getNewFeedItems() {
   let allNewFeedItems = [];
 
   const feeds = [
-    "https://hackernoon.com/feed",
-    "https://techcrunch.com/feed/",
-    "http://theverge.com/rss/index.xml",
-    "https://dev.to/feed",
-    "https://thenextweb.com/feed",
-    "https://www.wired.com/feed",
-    "https://hackernoon.com/feed",
+    "https://www.cnet.com/rss/news/",
+    "https://blog.codinghorror.com/rss/",
     "https://css-tricks.com/feed/",
-    "https://www.producthunt.com/feed?category=undefined",
+    "https://cult.honeypot.io/rss.xml",
+    "https://dev.to/feed",
+    "https://www.freecodecamp.org/news/rss",
+    "https://hackernoon.com/feed",
+    "https://javascript.plainenglish.io/feed",
+    "https://mashable.com/feeds/rss/tech",
+    "https://www.technologyreview.com/feed/",
+    "https://www.omgubuntu.co.uk/feed",
+    "https://blog.openreplay.com/rss.xml",
+    "https://www.producthunt.com/feed",
+    "https://www.smashingmagazine.com/feed/",
+    "https://techcrunch.com/feed/",
+    "https://feeds.feedburner.com/TheHackersNews",
+    "https://thenextweb.com/feed/",
+    "https://www.theverge.com/rss/index.xml",
+    "https://www.vox.com/rss/technology/index.xml",
+    "https://www.wired.com/feed/",
+    "https://www.xda-developers.com/feed/",
   ];
 
   for (let i = 0; i < feeds.length; i++) {
@@ -68,22 +80,6 @@ async function getNewFeedItems() {
   // sort feed items by published date
   allNewFeedItems.sort((a, b) => new Date(a.pubDate) - new Date(b.pubDate));
   return allNewFeedItems;
-}
-
-async function main() {
-  // creating connection
-  await prisma.$connect();
-  // creating data into soruce collection
-  await prisma.articles.create({
-    data: {
-      title: dataObj.title,
-      url: dataObj.url,
-      image: dataObj.image,
-      description: dataObj.description,
-      pubDate: feed.pubDate,
-      author: feed.author,
-    },
-  });
 }
 
 async function syncFeed() {
@@ -117,7 +113,7 @@ async function feedFetching() {
       image: data.og.image || data.meta.image,
       description: data.og.description || data.meta.description,
       pubDate: feedUrl.pubDate,
-      author: feedUrl.author,
+      author: feedUrl.author || "Anonymous",
     };
     metaArr = [...metaArr, metaObj];
   }
@@ -128,15 +124,7 @@ async function feedFetching() {
 async function syncToDb() {
   await prisma.$connect();
   const res = await feedFetching();
-  const mongoUrls = await prisma.articles
-    .findMany
-    // only fetch url of from the database
-    // {
-    //   select: {
-    //     url: true,
-    //   },
-    // }
-    ();
+  const mongoUrls = await prisma.articles.findMany();
   // console.log(mongoUrls);
 
   // comapring urls from res.urls and mongoUrls
@@ -153,8 +141,8 @@ async function syncToDb() {
       data: {
         title: url.title,
         url: url.url,
-        image: url.image,
-        description: url.description,
+        image: url.image || null,
+        description: url.description || "",
         pubDate: url.pubDate,
         author: url.author,
       },
