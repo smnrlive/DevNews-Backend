@@ -141,7 +141,7 @@ async function syncToDb() {
       data: {
         title: url.title,
         url: url.url,
-        image: url.image || null,
+        image: url.image,
         description: url.description || "",
         pubDate: url.pubDate,
         author: url.author,
