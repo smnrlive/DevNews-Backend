@@ -1,13 +1,24 @@
 const { parser } = require("html-metadata-parser");
 const Parser = require("rss-parser");
 const { PrismaClient } = require("@prisma/client");
+const axios = require("axios").default;
 
 // creating prisma client
 const prisma = new PrismaClient();
 
+// Meta Data 
 async function getData(url) {
-  const result = await parser(url);
-  return result;
+  // check url response status if it is 404 then return null else return data
+  try {
+    const response = await axios.get(url);
+    if (response.status === 404) {
+      return null;
+    }
+    const data = await parser(url);
+    return data;
+  } catch (error) {
+    return null;
+  }
 }
 
 function timeDifference(date1, date2) {
@@ -107,6 +118,7 @@ async function feedFetching() {
     const feedUrl = feedUrls[i];
     const data = await getData(feedUrl.url);
     // console.log(feedItems)
+    if (data != null){
     let metaObj = {
       title: data.og.title || data.meta.title,
       url: data.og.url || data.meta.url,
@@ -117,6 +129,7 @@ async function feedFetching() {
     };
     metaArr = [...metaArr, metaObj];
   }
+}
   // console.log(metaArr);
   return metaArr;
 }
