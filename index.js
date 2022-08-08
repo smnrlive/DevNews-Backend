@@ -163,6 +163,7 @@ async function syncToDb() {
       },
     });
   }
+await prisma.$disconnect();
 }
 
 // delete all data from database
