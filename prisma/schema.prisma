@@ -15,5 +15,13 @@ model articles {
   image       String
   pubDate     String
   title       String
-  url         String
+  // make url attribute a unique index
+  url         String    @unique
+}
+
+model CommunityUrls {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  url         String 
+  email       String?
+  createdAt   DateTime? @default(now())
 }
