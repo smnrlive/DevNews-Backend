@@ -6,7 +6,7 @@ const axios = require("axios").default;
 // creating prisma client
 const prisma = new PrismaClient();
 
-// Meta Data 
+// Meta Data
 async function getData(url) {
   // check url response status if it is 404 then return null else return data
   try {
@@ -59,14 +59,14 @@ async function getNewFeedItems() {
   let allNewFeedItems = [];
 
   const feeds = [
-//     "https://www.cnet.com/rss/news/",
+    //     "https://www.cnet.com/rss/news/",
     "https://blog.codinghorror.com/rss/",
     "https://css-tricks.com/feed/",
     "https://cult.honeypot.io/rss.xml",
     "https://dev.to/feed",
     "https://www.freecodecamp.org/news/rss",
     "https://hackernoon.com/feed",
-//     "https://javascript.plainenglish.io/feed",
+    //     "https://javascript.plainenglish.io/feed",
     "https://mashable.com/feeds/rss/tech",
     "https://www.technologyreview.com/feed/",
     "https://www.omgubuntu.co.uk/feed",
@@ -118,18 +118,18 @@ async function feedFetching() {
     const feedUrl = feedUrls[i];
     const data = await getData(feedUrl.url);
     // console.log(feedItems)
-    if (data != null){
-    let metaObj = {
-      title: data.og.title || data.meta.title,
-      url: data.og.url || data.meta.url,
-      image: data.og.image || data.meta.image,
-      description: data.og.description || data.meta.description,
-      pubDate: feedUrl.pubDate,
-      author: feedUrl.author || "Anonymous",
-    };
-    metaArr = [...metaArr, metaObj];
+    if (data != null) {
+      let metaObj = {
+        title: data.og.title || data.meta.title,
+        url: data.og.url || data.meta.url,
+        image: data.og.image || data.meta.image,
+        description: data.og.description || data.meta.description,
+        pubDate: feedUrl.pubDate,
+        author: feedUrl.author || "Anonymous",
+      };
+      metaArr = [...metaArr, metaObj];
+    }
   }
-}
   // console.log(metaArr);
   return metaArr;
 }
@@ -150,20 +150,22 @@ async function syncToDb() {
   // adding data to database
   for (let i = 0; i < urlsToBeAdded.length; i++) {
     const url = urlsToBeAdded[i];
-    await prisma.articles.create({
-      data: {
-        title: url.title,
-        url: url.url,
-        image:
-          url.image ||
-          "https://res.cloudinary.com/amrohan/image/upload/v1658154724/Images/jhlb4lmgalptjtk2hknv.jpg",
-        description: url.description || "",
-        pubDate: url.pubDate,
-        author: url.author,
-      },
-    });
+    if (url.url != undefined) {
+      await prisma.articles.create({
+        data: {
+          title: url.title,
+          url: url.url,
+          image:
+            url.image ||
+            "https://res.cloudinary.com/amrohan/image/upload/v1658154724/Images/jhlb4lmgalptjtk2hknv.jpg",
+          description: url.description || "",
+          pubDate: url.pubDate,
+          author: url.author,
+        },
+      });
+    }
   }
-await prisma.$disconnect();
+  await prisma.$disconnect();
 }
 
 // delete all data from database
