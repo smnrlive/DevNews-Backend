@@ -61,7 +61,7 @@ async function getNewFeedItems() {
   const feeds = [
     "https://blog.codinghorror.com/rss/",
     "https://blog.logrocket.com/feed/",
-    "https://hashnode.com/n/web-development/rss",
+    // "https://hashnode.com/n/web-development/rss",
     "https://css-tricks.com/feed/",
     "https://cult.honeypot.io/rss.xml",
     "https://dev.to/feed",
