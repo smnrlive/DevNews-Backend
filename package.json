@@ -8,17 +8,18 @@
   "license": "y",
   "private": true,
   "scripts": {
-    "start": "node index.js && prisma generate",
+    "db:generate": "prisma generate",
+    "start": "node index.js",
     "dev": "nodemon index.js",
     "sync": "node handler.js"
   },
   "dependencies": {
-    "@prisma/client": "^4.0.0",
+    "@prisma/client": "latest",
     "axios": "^0.27.2",
     "html-metadata-parser": "^2.0.4",
     "rss-parser": "^3.12.0"
   },
   "devDependencies": {
-    "prisma": "^4.0.0"
+    "prisma": "latest"
   }
 }
