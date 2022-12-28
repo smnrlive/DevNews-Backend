@@ -8,7 +8,7 @@
   "license": "y",
   "private": true,
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js && prisma generate",
     "dev": "nodemon index.js",
     "sync": "node handler.js"
   },
