@@ -19,6 +19,6 @@ jobs:
         with:
           cmd: install
       - uses: borales/actions-yarn@v3.0.0
-      - run: npx prisma generate
-        with:
+      - run: 
+          cmd: npx prisma generate
           cmd: start
