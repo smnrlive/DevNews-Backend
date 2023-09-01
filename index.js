@@ -79,7 +79,7 @@ async function syncFeed() {
 
   const feedUrls = data.map((item) => {
     const dataObj = {
-      // title: item.title,
+      title: item.title,
       url: item.link,
       // description: item.contentSnippet,
       pubDate: item.pubDate,
@@ -101,7 +101,7 @@ async function feedFetching() {
     // console.log(feedItems)
     if (data != null) {
       let metaObj = {
-        title: data.og.title || data.meta.title,
+        title: feedUrl.title,
         url: data.og.url || data.meta.url,
         image: data.og.image || data.meta.image,
         description: data.og.description || data.meta.description,
