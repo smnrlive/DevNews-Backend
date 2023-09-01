@@ -59,28 +59,8 @@ async function getNewFeedItems() {
   let allNewFeedItems = [];
 
   const feeds = [
-    "https://blog.codinghorror.com/rss/",
-    "https://blog.logrocket.com/feed/",
-    // "https://hashnode.com/n/web-development/rss",
-    "https://css-tricks.com/feed/",
-    "https://cult.honeypot.io/rss.xml",
-    "https://dev.to/feed",
-    "https://www.freecodecamp.org/news/rss",
-    "https://hackernoon.com/feed",
-    "https://javascript.plainenglish.io/feed",
-    "https://mashable.com/feeds/rss/tech",
-    "https://www.technologyreview.com/feed/",
-    "https://www.omgubuntu.co.uk/feed",
-    "https://blog.openreplay.com/rss.xml",
-    "https://www.producthunt.com/feed",
-    "https://www.smashingmagazine.com/feed/",
-    "https://techcrunch.com/feed/",
-    "https://feeds.feedburner.com/TheHackersNews",
-    "https://thenextweb.com/feed/",
-    "https://www.theverge.com/rss/index.xml",
-    "https://www.vox.com/rss/technology/index.xml",
-    "https://www.wired.com/feed/",
-    "https://www.xda-developers.com/feed/",
+    "https://news.google.com/rss?hl=en-IN&gl=IN&ceid=IN:en",
+    
   ];
 
   for (let i = 0; i < feeds.length; i++) {
